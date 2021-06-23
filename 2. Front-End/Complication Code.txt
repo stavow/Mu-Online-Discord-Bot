@@ -1,0 +1,1 @@
+nexe -r "./commands/" -t x64-10.16.0 -o "bot.exe"  

@@ -1,0 +1,416 @@
+﻿<Window x:Class="MuDiscordBotGUI.MainWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MuDiscordBotGUI"
+        mc:Ignorable="d"
+        AllowsTransparency="True"
+        ResizeMode="CanResize"
+        WindowStyle="None"
+        BorderThickness="1"
+        BorderBrush="Black"
+        Title="MainWindow" Height="600" Width="800" MinWidth="800" MinHeight="600" Background="#FF111111" Closing="Window_Closing">
+    <Window.Resources>
+        <Style x:Key="RectBorderStyle" TargetType="Rectangle">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
+            <EventSetter Event="MouseLeftButtonDown" Handler="Resize_Init"/>
+            <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
+            <EventSetter Event="MouseMove" Handler="Resizeing_Form"/>
+        </Style>
+        <Style x:Key="CustomMaterialDesignFlatButton" 
+        BasedOn="{StaticResource MaterialDesignFlatButton}"
+        TargetType="{x:Type Button}">
+            <Style.Resources>
+                <Border x:Key="PrimaryBorderBrush" CornerRadius="0,0,0,0"></Border>
+                <Color x:Key="PrimaryHueMidBrushColor">Red</Color>
+                <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="White" />
+
+            </Style.Resources>
+        </Style>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="50"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="GridMenu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="50"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonCloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid>
+
+        <Grid Name="consoleGrid" Margin="50,77,0,0">
+            <Button x:Name="stopBot" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="0,15,16,0" HorizontalAlignment="Right" VerticalAlignment="Top" PreviewMouseLeftButtonDown="stopBot_MouseLeftButtonDown">
+                <materialDesign:PackIcon Kind="Stop" />
+            </Button>
+            <Button x:Name="startBot" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="0,15,76,0" HorizontalAlignment="Right" VerticalAlignment="Top" PreviewMouseLeftButtonDown="startBot_MouseLeftButtonDown">
+                <materialDesign:PackIcon Kind="Play"/>
+            </Button>
+            <GroupBox Header="C O N S O L E"  Margin="16,80, 16,16"   materialDesign:ColorZoneAssist.Mode="Custom"    materialDesign:ColorZoneAssist.Foreground="Black" materialDesign:ColorZoneAssist.Background="#FF0BC8FF" FontFamily="./Fonts/#Poppins Regular">
+                <TextBox x:Name="console" Foreground="White" FontFamily="Consolas" IsReadOnly="True" />
+            </GroupBox>
+        </Grid>
+
+
+        <Grid Name="settingsGrid" Margin="50,77,0,0" Visibility="Hidden">
+            <Grid Margin="0,0,0,400" VerticalAlignment="Top" Height="121">
+                <ComboBox x:Name="categ" Foreground="White" Style="{StaticResource MaterialDesignFilledComboBox}" HorizontalAlignment="Center" MaxWidth="300" materialDesign:HintAssist.Hint="Category" Margin="0,31,0,31" MinWidth="180" Height="54">
+                    <ComboBoxItem Content="SQL" />
+                    <ComboBoxItem Content="Tables" />
+                    <ComboBoxItem Content="Members" />
+                    <ComboBoxItem Content="Stats" />
+                    <ComboBoxItem Content="Accounts" />
+                    <ComboBoxItem Content="Character" />
+                    <ComboBoxItem Content="Information" />
+                    <ComboBoxItem Content="Discord" />
+                    <ComboBoxItem Content="Discord Events" />
+                    <ComboBoxItem Content="Discord Shop" />
+                    <ComboBoxItem Content="Discord Emojis" />
+                    <ComboBoxItem Content="Disable Commands" />
+                </ComboBox>
+                <Button x:Name="choose" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="270,36,0,31" HorizontalAlignment="Center" VerticalAlignment="Top" PreviewMouseLeftButtonDown="choose_MouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="CheckBold" PreviewMouseLeftButtonDown="choose_MouseLeftButtonDown"/>
+                </Button>
+                <Button x:Name="save" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="390,36,0,31" HorizontalAlignment="Center" VerticalAlignment="Top" PreviewMouseLeftButtonDown="save_MouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ContentSave" PreviewMouseLeftButtonDown="save_MouseLeftButtonDown"/>
+                </Button>
+                <Button x:Name="undo" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="510,36,0,31" HorizontalAlignment="Center" VerticalAlignment="Top" PreviewMouseLeftButtonDown="undo_MouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="UndoVariant" PreviewMouseLeftButtonDown="undo_MouseLeftButtonDown"/>
+                </Button>
+            </Grid>
+            <Grid x:Name="sqlConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="sqlServer" materialDesign:HintAssist.Hint="Server" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="sqlDb" materialDesign:HintAssist.Hint="Database" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="sqlUser" materialDesign:HintAssist.Hint="User" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="sqlPwd" materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="sqlPort" materialDesign:HintAssist.Hint="Port" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="tablesConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="tablesSchema" materialDesign:HintAssist.Hint="Schema" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="tablesMembers" materialDesign:HintAssist.Hint="Members" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="tablesStats" materialDesign:HintAssist.Hint="Stats" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="tablesAccounts" materialDesign:HintAssist.Hint="Accounts" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="tablesCharacters" materialDesign:HintAssist.Hint="Characters" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="membersConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="membersID" materialDesign:HintAssist.Hint="Members ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="membersPassword" materialDesign:HintAssist.Hint="Members Password" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="membersName" materialDesign:HintAssist.Hint="Members Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="membersPhone" materialDesign:HintAssist.Hint="Members Phone" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="membersMail" materialDesign:HintAssist.Hint="Members Mail" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="statsConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="statsMembersID" materialDesign:HintAssist.Hint="Members ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="connectionStatus" materialDesign:HintAssist.Hint="Connection Status" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="serverName" materialDesign:HintAssist.Hint="Server Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="IP" materialDesign:HintAssist.Hint="IP" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="lastConnection" materialDesign:HintAssist.Hint="Last Connection" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="lastDisconnect" materialDesign:HintAssist.Hint="Last Disconnect" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="onlineHours" materialDesign:HintAssist.Hint="Online Hours" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,320,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+            </Grid>
+            <Grid x:Name="accountsConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="ID" materialDesign:HintAssist.Hint="ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="firstCharacter" materialDesign:HintAssist.Hint="First Character" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="secondsCharacter" materialDesign:HintAssist.Hint="Second Character" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="thirdCharacter" materialDesign:HintAssist.Hint="Third Character" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="forthCharacter" materialDesign:HintAssist.Hint="Forth Character" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="fifthCharacter" materialDesign:HintAssist.Hint="Fifth Character" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="characterConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="accountID" materialDesign:HintAssist.Hint="Account ID" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="cName" materialDesign:HintAssist.Hint="Character Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="cLevel" materialDesign:HintAssist.Hint="Character Level" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="cClass" materialDesign:HintAssist.Hint="Class" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="strength" materialDesign:HintAssist.Hint="Strength" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="dexterity" materialDesign:HintAssist.Hint="Dexterity" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="vitality" materialDesign:HintAssist.Hint="Vitality" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,320,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+                <TextBox x:Name="energy" materialDesign:HintAssist.Hint="Energy" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="command" materialDesign:HintAssist.Hint="Command" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="levelUpPoints" materialDesign:HintAssist.Hint="LevelUpPoints" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="inventory" materialDesign:HintAssist.Hint="Inventory" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="money" materialDesign:HintAssist.Hint="Money" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="maxLife" materialDesign:HintAssist.Hint="Max Life" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="mapNumber" materialDesign:HintAssist.Hint="Map Number" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,320,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+                <TextBox x:Name="mapX" materialDesign:HintAssist.Hint="Map X" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,20,0,0" MaxWidth="80" Width="80" MinWidth="80" />
+                <TextBox x:Name="mapY" materialDesign:HintAssist.Hint="Map Y" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="580,20,0,0" MaxWidth="80" Width="80" MinWidth="80" />
+
+                <TextBox x:Name="PkLevel" materialDesign:HintAssist.Hint="Pk Level" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,70,0,0" MaxWidth="80" Width="80" MinWidth="80" />
+                <TextBox x:Name="PkCount" materialDesign:HintAssist.Hint="Pk Count" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="580,70,0,0" MaxWidth="80" Width="80" MinWidth="80" />
+
+                <TextBox x:Name="ctlCode" materialDesign:HintAssist.Hint="Ctl Code" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="resets" materialDesign:HintAssist.Hint="Resets" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="married" materialDesign:HintAssist.Hint="Married" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="marryName" materialDesign:HintAssist.Hint="Marry Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="490,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+            </Grid>
+            <Grid x:Name="informationConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="servName" materialDesign:HintAssist.Hint="Server Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="serverIP" materialDesign:HintAssist.Hint="IP" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="siteDomain" materialDesign:HintAssist.Hint="Site Domain" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="serverImage" materialDesign:HintAssist.Hint="Server Image" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="pkClearCost" materialDesign:HintAssist.Hint="Pk Clear Cost" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="pkFirstMurderer" materialDesign:HintAssist.Hint="Pk First Murderer" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="pkFirstHero" materialDesign:HintAssist.Hint="Pk First Hero" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,320,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+                <TextBox x:Name="resetLevel" materialDesign:HintAssist.Hint="Reset Level" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="fullStat" materialDesign:HintAssist.Hint="Full Stat" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="prefix" materialDesign:HintAssist.Hint="Prefix" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="pkTopHero" materialDesign:HintAssist.Hint="PK Top Hero" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="pkTopMurderer" materialDesign:HintAssist.Hint="PK Top Murderer" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="discordConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="currencyName" materialDesign:HintAssist.Hint="Currency Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="commandsChannel" materialDesign:HintAssist.Hint="Commands Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="adminsCommandChannel" materialDesign:HintAssist.Hint="Admins Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="communicationChannel" materialDesign:HintAssist.Hint="Communication Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="levelupChannel" materialDesign:HintAssist.Hint="Levelup Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="spamChannel" materialDesign:HintAssist.Hint="Spam Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,270,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="moderationRoles" materialDesign:HintAssist.Hint="Moderation Roles" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,320,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+
+                <TextBox x:Name="discordHighModerationRoles" materialDesign:HintAssist.Hint="High Moderation Roles" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoTransferCategory" materialDesign:HintAssist.Hint="Auto Transfer Category" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoTransferInstructionsChannel" materialDesign:HintAssist.Hint="Auto Transfer Instructions Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="270,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="discordEventsConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="eventsChannel" materialDesign:HintAssist.Hint="Events Channel" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoMathEvent" materialDesign:HintAssist.Hint="Auto Math Event" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,70,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoMathEventAnswers" materialDesign:HintAssist.Hint="Auto Math Event Answers" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,120,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoMathEventRewards" materialDesign:HintAssist.Hint="Auto Math Event Rewards" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,170,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoTriviaEvent" materialDesign:HintAssist.Hint="Auto Trivia Event" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="autoTriviaEventAnswer" materialDesign:HintAssist.Hint="Auto Trivia Event Answer" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,220,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="discordShopConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="categories" materialDesign:HintAssist.Hint="Categories" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="discordEmojiConfig" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBox x:Name="serverEmoji" materialDesign:HintAssist.Hint="Server Image Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="knightEmoji" materialDesign:HintAssist.Hint="Knight Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="elfEmoji" materialDesign:HintAssist.Hint="Elf Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="wizardEmoji" materialDesign:HintAssist.Hint="Wizard Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="lordEmoji" materialDesign:HintAssist.Hint="Lord Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="gladiatorEmoji" materialDesign:HintAssist.Hint="Gladiator Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="rfEmoji" materialDesign:HintAssist.Hint="Rage Fighter Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+                <TextBox x:Name="summEmoji" materialDesign:HintAssist.Hint="Summoner Emoji" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Foreground="White" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="50,20,0,0" MaxWidth="170" Width="170" MinWidth="170" />
+            </Grid>
+            <Grid x:Name="disableCommands" Margin="0,121,0,0" Visibility="Hidden">
+                <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Admin Commands" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="73,9,0,0" Foreground="#FF0BC8FF"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="addBal" Content="!addbal" VerticalAlignment="Top" Margin="33,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="addItem" Content="!additem" VerticalAlignment="Top" Margin="153,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="adminAdd" Content="!adminadd" VerticalAlignment="Top" Margin="33,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="banAcc" Content="!banacc" VerticalAlignment="Top" Margin="153,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="banChar" Content="!banchar" VerticalAlignment="Top" Margin="33,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="dc" Content="!dc" VerticalAlignment="Top" Margin="153,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="dcAcc" Content="!dcadd" VerticalAlignment="Top" Margin="33,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="editItem" Content="!edititem" VerticalAlignment="Top" Margin="153,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="forceMarry" Content="!forcemarry" VerticalAlignment="Top" Margin="33,219,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="notice" Content="!notice" VerticalAlignment="Top" Margin="153,219,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="removeItem" Content="!removeitem" VerticalAlignment="Top" Margin="33,259,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setBal" Content="!setbal" VerticalAlignment="Top" Margin="153,259,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setClass" Content="!setclass" VerticalAlignment="Top" Margin="33,299,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setFull" Content="!setfull" VerticalAlignment="Top" Margin="153,299,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setLevel" Content="!setlevel" VerticalAlignment="Top" Margin="33,339,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setMoney" Content="!setmoney" VerticalAlignment="Top" Margin="153,339,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setNick" Content="!setnick" VerticalAlignment="Top" Margin="263,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setPkLevel" Content="!setpklevel" VerticalAlignment="Top" Margin="263,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setPoints" Content="!setpoints" VerticalAlignment="Top" Margin="263,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="setResets" Content="!setresets" VerticalAlignment="Top" Margin="263,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="switchCMD" Content="!switch" VerticalAlignment="Top" Margin="263,219,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="unBanAcc" Content="!unbanacc" VerticalAlignment="Top" Margin="263,259,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="unBanChar" Content="!unbanchar" VerticalAlignment="Top" Margin="263,299,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="crewEdit" Content="!crewedit" VerticalAlignment="Top" Margin="263,339,0,0"/>
+
+                <TextBlock Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="Player Commands" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="437,9,0,0" Foreground="#FF0BC8FF"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="autotransfer" Content="!autotransfer" VerticalAlignment="Top" Margin="417,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="cancel" Content="!cancel" VerticalAlignment="Top" Margin="537,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="forceMathEvent" Content="!math" VerticalAlignment="Top" Margin="417,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="add" Content="!add" VerticalAlignment="Top" Margin="537,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="auth" Content="!auth" VerticalAlignment="Top" Margin="417,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="balance" Content="!bal" VerticalAlignment="Top" Margin="537,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="buyItem" Content="!buyitem" VerticalAlignment="Top" Margin="417,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="deAuth" Content="!deauth" VerticalAlignment="Top" Margin="537,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="info" Content="!info" VerticalAlignment="Top" Margin="417,219,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="itemInfo" Content="!iteminfo" VerticalAlignment="Top" Margin="537,219,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="marry" Content="!marry" VerticalAlignment="Top" Margin="417,259,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="pay" Content="!pay" VerticalAlignment="Top" Margin="537,259,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="pkclear" Content="!pkclear" VerticalAlignment="Top" Margin="417,299,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="post" Content="!post" VerticalAlignment="Top" Margin="537,299,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="reset" Content="!reset" VerticalAlignment="Top" Margin="417,339,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="selchar" Content="!selchar" VerticalAlignment="Top" Margin="537,339,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="shop" Content="!shop" VerticalAlignment="Top" Margin="644,59,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="test" Content="!test" VerticalAlignment="Top" Margin="644,99,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="topreset" Content="!topreset" VerticalAlignment="Top" Margin="644,139,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="confirm" Content="!confirm" VerticalAlignment="Top" Margin="644,179,0,0"/>
+                <CheckBox Style="{StaticResource MaterialDesignFilterChipPrimaryOutlineCheckBox}" IsChecked="True" x:Name="crew" Content="!crew" VerticalAlignment="Top" Margin="644,219,0,0"/>
+
+
+            </Grid>
+        </Grid>
+
+        <Grid Name="imageBrowser" Margin="50,77,0,0" Visibility="Hidden">
+            <Grid Margin="0,0,0,0" Width="250" HorizontalAlignment="Left">
+                <ComboBox x:Name="directory" Foreground="White" Margin="10,20,0,0" VerticalContentAlignment="Center" Style="{StaticResource MaterialDesignFilledComboBox}" HorizontalAlignment="Left" MaxWidth="170" IsEnabled="{Binding Path=IsChecked, ElementName=FilledComboBoxEnabledCheckBox}" materialDesign:HintAssist.Hint="Directory" VerticalAlignment="Top" MinWidth="170" Height="54">
+                </ComboBox>
+                <Button x:Name="getImages" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="185,25,0,31" HorizontalAlignment="Center" VerticalAlignment="Top" PreviewMouseLeftButtonDown="getImages_PreviewMouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ImageSearch" PreviewMouseLeftButtonDown="getImages_PreviewMouseLeftButtonDown"/>
+                </Button>
+                <Button x:Name="addImage" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="21,89,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewMouseLeftButtonDown="addImage_PreviewMouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ImagePlus" PreviewMouseLeftButtonDown="addImage_PreviewMouseLeftButtonDown"/>
+                </Button>
+                <Button x:Name="removeImage" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="74,89,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewMouseLeftButtonDown="removeImage_PreviewMouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ImageRemove" PreviewMouseLeftButtonDown="removeImage_PreviewMouseLeftButtonDown"/>
+                </Button>
+                <Button x:Name="renameImage" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="127,89,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewMouseLeftButtonDown="renameImage_PreviewMouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ImageEdit"/>
+                </Button>
+                <Button x:Name="replaceImage" Style="{StaticResource MaterialDesignIconButton}" Foreground="#FF0BC8FF" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Margin="180,89,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" PreviewMouseLeftButtonDown="replaceImage_PreviewMouseLeftButtonDown">
+                    <materialDesign:PackIcon Kind="ImageMove"/>
+                </Button>
+                <ListView x:Name="imageList" Style="{StaticResource MaterialDesignListView}" HorizontalAlignment="Center" MinHeight="360" Margin="0,153,0,0" VerticalAlignment="Top" Width="232" Height="360" SelectionChanged="imageList_SelectionChanged">
+                </ListView>
+
+            </Grid>
+            <Grid Margin="250,0,0,0" Width="5" HorizontalAlignment="Left" Background="Black">
+
+            </Grid>
+            <Grid Margin="255,0,0,0">
+                <Grid Background="#7F000000">
+                    <Image x:Name="imagePreview" Margin="40,26">
+                    </Image>
+                </Grid>
+            </Grid>
+        </Grid>
+        <StackPanel x:Name="topTaskbar" Margin="0,0,0,0" Background="Black" Height="37" VerticalAlignment="Top" MouseLeftButtonDown="topTaskbar_MouseLeftButtonDown">
+            <TextBlock x:Name="textBlock" Text="M U  D I S C O R D  B O T" TextWrapping="Wrap" Width="284" Height="37" HorizontalAlignment="Left" Foreground="#FF0BC8FF" FontFamily="./Fonts/#Poppins Regular"  FontSize="20" Padding="20,3,0,0"/>
+        </StackPanel>
+        <Grid Margin="0,37,0,0" Height="40" VerticalAlignment="Top">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0.5,1" MappingMode="RelativeToBoundingBox" SpreadMethod="Reflect">
+                    <GradientStop Color="#FF0BC8FF" Offset="0"/>
+                    <GradientStop Color="#FF166C8D" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <materialDesign:Badged x:Name="notiBadge" Badge="" HorizontalAlignment="Right" Height="30" Width="30" Margin="0,6,45,4">
+            <materialDesign:PopupBox Style="{StaticResource MaterialDesignPopupBox}" Background="#FF2C2C2C" PreviewMouseLeftButtonDown="PopupBox_PreviewMouseLeftButtonDown">
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon Kind="Bell" Foreground="White" VerticalAlignment="Center" Height="30" Width="30"  />
+                </materialDesign:PopupBox.ToggleContent>
+                
+                <ListView x:Name="notifications" Width="350" Height="350" SelectionMode="Single" HorizontalAlignment="Left" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
+                                <TextBlock Text="Notifications" FontSize="20"></TextBlock>
+                            </GridViewColumn >
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </materialDesign:PopupBox>
+            </materialDesign:Badged>
+            <materialDesign:PopupBox Style="{StaticResource MaterialDesignPopupBox}"  HorizontalAlignment="Right" Height="30" Width="30" Margin="0,6,10,4">
+                <materialDesign:PopupBox.ToggleContent>
+                    <materialDesign:PackIcon Kind="AccountCircle" Foreground="White" VerticalAlignment="Center" Height="30" Width="30"  />
+                </materialDesign:PopupBox.ToggleContent>
+                <StackPanel>
+                    <Button Content="More" />
+                    <Button Content="Options" />
+                </StackPanel>
+            </materialDesign:PopupBox>
+        </Grid>
+        <Grid x:Name="GridMenu" Width="50" Margin="0,37,0,0" HorizontalAlignment="Left" Background="#FF232323">
+            <StackPanel>
+                <Grid Height="40" Background="#FF2B2A2A" RenderTransformOrigin="0.5,0.5">
+                    <Grid.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Grid.RenderTransform>
+                    <Button x:Name="ButtonOpenMenu" Height="40" Width="50" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF31577E" Click="ButtonOpenMenu_Click">
+                        <materialDesign:PackIcon Kind="ArrowRight" Width="25" Height="25" Foreground="#FF0BC8FF"/>
+                    </Button>
+                    <Button x:Name="ButtonCloseMenu" Visibility="Collapsed" Height="40" Width="50" HorizontalAlignment="Right" VerticalAlignment="Top" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FF0BC8FF" Click="ButtonCloseMenu_Click">
+                        <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
+                    </Button>
+
+                    <Image Height="10" VerticalAlignment="Bottom"/>
+
+                </Grid>
+                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ListViewMenu_SelectionChanged">
+                    <ListViewItem x:Name="ConsoleGridOpen" Height="60" MouseLeftButtonDown="ConsoleGridOpen_MouseLeftButtonDown" PreviewMouseLeftButtonDown="ConsoleGridOpen_MouseLeftButtonDown">
+                        <Grid MouseLeftButtonDown="ConsoleGridOpen_MouseLeftButtonDown">
+                            <StackPanel Orientation="Horizontal" MouseLeftButtonDown="ConsoleGridOpen_MouseLeftButtonDown">
+                                <materialDesign:PackIcon Kind="Console" Height="25" Width="25" Margin="5" Foreground="#FF0BC8FF"/>
+                                <TextBlock Text="Console" VerticalAlignment="Center" Margin="20 10"/>
+                            </StackPanel>
+                        </Grid>
+                    </ListViewItem>
+                    <ListViewItem x:Name="SettingsGridOpen" Height="60" PreviewMouseLeftButtonDown="SettingsGridOpen_MouseLeftButtonDown">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Cog" Height="25" Width="25" Margin="5" Foreground="#FF0BC8FF"/>
+                                <TextBlock Text="Configuration" VerticalAlignment="Center" Margin="20 10"/>
+                            </StackPanel>
+                        </Grid>
+                    </ListViewItem>
+                    <ListViewItem Height="60" PreviewMouseLeftButtonDown="ListViewItem_PreviewMouseLeftButtonDown">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FolderImage" Height="25" Width="25" Margin="5" Foreground="#FF0BC8FF"/>
+                            <TextBlock Text="Image Browser" VerticalAlignment="Center"  Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Speedometer" Height="25" Width="25" Margin="5" Foreground="#FF0BC8FF"/>
+                            <TextBlock Text="Productivity" VerticalAlignment="Center"  Margin="20 10"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel>
+        </Grid>
+        <Button x:Name="exitBtn" Margin="754,0,0,563" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:RippleAssist.Feedback="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Height="37" Style="{StaticResource CustomMaterialDesignFlatButton}" Width="46" Click="exitBtn_Click">
+            <materialDesign:PackIcon Kind="WindowClose" Foreground="Red" />
+
+        </Button>
+        <Button x:Name="maximizeBtn" Margin="708,0,46,563" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:RippleAssist.Feedback="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Height="37" Style="{StaticResource CustomMaterialDesignFlatButton}" Click="maximizeBtn_Click" Width="46">
+            <materialDesign:PackIcon Kind="SquareOutline" Foreground="White" />
+
+        </Button>
+        <Button Margin="662,0,92,563" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:RippleAssist.Feedback="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Height="37" Style="{StaticResource CustomMaterialDesignFlatButton}" Width="46">
+            <materialDesign:PackIcon Kind="WindowMinimize" Foreground="White" Height="31" Margin="0,5" />
+        </Button>
+       
+
+        <!-- RESIZE -->
+        <Rectangle x:Name="leftSizeGrip" Width="7" HorizontalAlignment="Left" Cursor="SizeWE" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="rightSizeGrip" Width="7" HorizontalAlignment="Right" Cursor="SizeWE" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="topSizeGrip" Height="7" VerticalAlignment="Top" Cursor="SizeNS" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle x:Name="bottomSizeGrip" Height="7" VerticalAlignment="Bottom" Cursor="SizeNS" Style="{StaticResource RectBorderStyle}" />
+        <!--  Corners  -->
+        <Rectangle Name="topLeftSizeGrip" Width="7" Height="7" HorizontalAlignment="Left" VerticalAlignment="Top" Cursor="SizeNWSE" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle Name="bottomRightSizeGrip" Width="7" Height="7" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="SizeNWSE" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle Name="topRightSizeGrip" Width="7" Height="7" HorizontalAlignment="Right" VerticalAlignment="Top" Cursor="SizeNESW" Style="{StaticResource RectBorderStyle}" />
+        <Rectangle Name="bottomLeftSizeGrip" Width="7" Height="7" HorizontalAlignment="Left" VerticalAlignment="Bottom" Cursor="SizeNESW" Style="{StaticResource RectBorderStyle}" />
+
+    </Grid>
+
+</Window>
