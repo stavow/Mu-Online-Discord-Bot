@@ -19,3 +19,7 @@ File Locations:
 More Details can be found here:
 - Hebrew - https://www.fxp.co.il/showthread.php?t=20495805
 - English - https://tuservermu.com.ve/index.php?topic=36706.msg193819;topicseen
+
+Videos:
+- https://www.youtube.com/watch?v=0NNMiNyGw-4&t=2s&ab_channel=OnLyWiNMU
+- https://www.youtube.com/watch?v=ee_hqzGIsHE&t=1s
