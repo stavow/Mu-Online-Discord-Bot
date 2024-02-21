@@ -21,5 +21,5 @@ More Details can be found here:
 - English - https://tuservermu.com.ve/index.php?topic=36706.msg193819;topicseen
 
 Videos:
-- https://www.youtube.com/watch?v=0NNMiNyGw-4&t=2s&ab_channel=OnLyWiNMU
-- https://www.youtube.com/watch?v=ee_hqzGIsHE&t=1s
+- https://www.youtube.com/watch?v=0NNMiNyGw-4
+- https://www.youtube.com/watch?v=ee_hqzGIsHE
